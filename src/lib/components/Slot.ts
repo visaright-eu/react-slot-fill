@@ -34,7 +34,7 @@ export interface Context {
 
 export default class Slot extends React.Component<Props, State> {
   static contextTypes = {
-    manager: managerShape
+    manager: managerShape,
   };
 
   context: Context;
@@ -46,7 +46,10 @@ export default class Slot extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    this.context.manager.onComponentsChange(this.props.name, this.handleComponentChange);
+    this.context.manager.onComponentsChange(
+      this.props.name,
+      this.handleComponentChange,
+    );
   }
 
   handleComponentChange(components: Component[]) {
@@ -59,7 +62,10 @@ export default class Slot extends React.Component<Props, State> {
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.name !== this.props.name) {
-      this.context.manager.removeOnComponentsChange(this.props.name, this.handleComponentChange);
+      this.context.manager.removeOnComponentsChange(
+        this.props.name,
+        this.handleComponentChange,
+      );
 
       const name = nextProps.name;
 
@@ -69,7 +75,10 @@ export default class Slot extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const name = this.props.name;
-    this.context.manager.removeOnComponentsChange(name, this.handleComponentChange);
+    this.context.manager.removeOnComponentsChange(
+      name,
+      this.handleComponentChange,
+    );
   }
 
   render() {
@@ -80,26 +89,15 @@ export default class Slot extends React.Component<Props, State> {
       const { fillChildProps } = this.props;
 
       if (fillChildProps) {
-        const transform = (acc: {}, key: string) => {
-          const value = fillChildProps[key];
-
-          if (typeof value === 'function') {
-            acc[key] = () => value(fill, this.fills);
-          } else {
-            acc[key] = value;
-          }
-
-          return acc;
-        };
-
-        const fillChildProps2 = Object.keys(fillChildProps).reduce(transform, {});
-
         children.forEach((child, index2) => {
           if (typeof child === 'number' || typeof child === 'string') {
             throw new Error('Only element children will work here');
           }
           aggElements.push(
-            React.cloneElement(child, { key: index.toString() + index2.toString(), ...fillChildProps2 })
+            React.cloneElement(child, {
+              key: index.toString() + index2.toString(),
+              ...fillChildProps,
+            }),
           );
         });
       } else {
@@ -109,7 +107,9 @@ export default class Slot extends React.Component<Props, State> {
           }
 
           aggElements.push(
-            React.cloneElement(child, { key: index.toString() + index2.toString() })
+            React.cloneElement(child, {
+              key: index.toString() + index2.toString(),
+            }),
           );
         });
       }
@@ -122,9 +122,13 @@ export default class Slot extends React.Component<Props, State> {
         return element;
       } else {
         const untypedThis: any = this;
-        const parentConstructor = untypedThis._reactInternalInstance._currentElement._owner._instance.constructor;
-        const displayName = parentConstructor.displayName || parentConstructor.name;
-        const message = `Slot rendered with function must return a valid React ` +
+        const parentConstructor =
+          untypedThis._reactInternalInstance._currentElement._owner._instance
+            .constructor;
+        const displayName =
+          parentConstructor.displayName || parentConstructor.name;
+        const message =
+          `Slot rendered with function must return a valid React ` +
           `Element. Check the ${displayName} render function.`;
         throw new Error(message);
       }
