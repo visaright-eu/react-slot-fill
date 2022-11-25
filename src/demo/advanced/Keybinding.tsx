@@ -119,7 +119,7 @@ class Keybind extends React.Component<any, any> {
     return false;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     Mousetrap.bind(this.props.hotkey, this.handleInvoke);
     this.props.onRegistered();
   }
@@ -129,7 +129,7 @@ class Keybind extends React.Component<any, any> {
     this.props.onUnRegistered();
   }
 
-  componentWillReceiveProps(nextProps: any) {
+  UNSAFE_componentWillReceiveProps(nextProps: any) {
     Mousetrap.unbind(this.props.hotkey);
     Mousetrap.bind(this.props.hotkey, this.handleInvoke);
   }

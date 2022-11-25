@@ -105,7 +105,7 @@ it('allows slots to render null', () => {
 it('Replaces the contents of the slot with the matching fill when the slot\'s `name` property changes', () => {
 
   class DynamicToolbar extends React.Component<any, any> {
-    // This example is contrived, but it covers Slot's componentWillReceiveProps
+    // This example is contrived, but it covers Slot's UNSAFE_componentWillReceiveProps
     static Active = ({ label }: { label: string }) => (
       <Fill name="DynamicToolbar.Active">
         <button>{label}</button>
