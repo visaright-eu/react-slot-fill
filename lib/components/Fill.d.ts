@@ -9,7 +9,7 @@ export default class Fill extends React.Component<Props, {}> {
     static contextTypes: {
         bus: Requireable<any>;
     };
-    componentWillMount(): void;
+    UNSAFE_componentWillMount(): void;
     componentDidUpdate(): void;
     componentWillUnmount(): void;
     render(): null;

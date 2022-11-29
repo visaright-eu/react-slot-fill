@@ -34,10 +34,10 @@ export default class Slot extends React.Component<Props, State> {
     };
     context: Context;
     constructor(props: Props);
-    componentWillMount(): void;
+    UNSAFE_componentWillMount(): void;
     handleComponentChange(components: Component[]): void;
     readonly fills: Fill[];
-    componentWillReceiveProps(nextProps: Props): void;
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void;
     componentWillUnmount(): void;
     render(): any;
 }
